@@ -1,0 +1,57 @@
+import sys
+import requests
+from PyQt6 import uic
+from PyQt6.QtCore import *
+from PyQt6.QtWidgets import *
+from db_connect import db, cursor
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('cms.ui', self)
+
+        self.tb_car.setColumnWidth(0, 50)
+        self.tb_car.setColumnWidth(1, 150)
+        self.tb_car.setColumnWidth(2, 150)
+        self.tb_car.setColumnWidth(3, 150)
+        self.tb_car.setColumnWidth(4, 180)
+
+        self.btn_add.clicked.connect(self.insert_car) #ทดสอบเวลาปุ่มถูกกด
+
+    def say_hi(self):
+        QMessageBox.information(self, 'Information', 'Hello World!')
+        self.senddis("Hello World!")
+
+    def insert_car(self):
+        brand = self.txt_brand.text()
+        model = self.txt_model.text()
+        year = self.txt_year.text()
+        price = self.txt_price.text()
+        sql = 'insert into car(brand, model, year, price) values(?, ?, ?, ?);'
+        values = (brand, model, year, price)
+
+        rs = cursor.execute(sql, values)
+        db.commit()
+        if rs.rowcount>0:
+            QMessageBox.information(self, 'Information', 'insert car successful!')
+            self.senddis(f"รถ {brand}\n{model}\nปี {year}\nราคา {price}")
+        else:
+            QMessageBox.warning(self, 'warning', 'Unable to insert car!')
+        
+        self.clear()
+    def clear(self):
+        self.txt_brand.setText('')
+        self.txt_model.setText('')
+        self.txt_year.setText('')
+        self.txt_price.setText('')
+
+    def senddis(self, text):
+        WEBHOOK_URL = "https://discordapp.com/api/webhooks/1475028899787440220/7vNWp_Su4kY2UluWnIfzkC64unLHEkISnsnNheMdJTDEJUUElKARdACmVzhb_3uO_Nym"
+        payload = {"content": f"{text}"}
+        response = requests.post(WEBHOOK_URL, json=payload)
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    app.exec()
