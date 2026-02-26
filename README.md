@@ -8,6 +8,5 @@
 ```python
 git clone https://github.com/SLOTH1/car-gui
 cd car-gui
-.venv\Scripts\activate
 py main.py
 ```
