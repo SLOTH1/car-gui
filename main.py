@@ -1,5 +1,4 @@
 import sys
-import requests
 from PyQt6 import uic
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
@@ -20,7 +19,6 @@ class MainWindow(QMainWindow):
 
     def say_hi(self):
         QMessageBox.information(self, 'Information', 'Hello World!')
-        self.senddis("Hello World!")
 
     def insert_car(self):
         brand = self.txt_brand.text()
@@ -45,10 +43,6 @@ class MainWindow(QMainWindow):
         self.txt_year.setText('')
         self.txt_price.setText('')
 
-    def senddis(self, text):
-        WEBHOOK_URL = "https://discordapp.com/api/webhooks/1475028899787440220/7vNWp_Su4kY2UluWnIfzkC64unLHEkISnsnNheMdJTDEJUUElKARdACmVzhb_3uO_Nym"
-        payload = {"content": f"{text}"}
-        response = requests.post(WEBHOOK_URL, json=payload)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
