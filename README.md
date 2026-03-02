@@ -8,5 +8,6 @@
 ```python
 git clone https://github.com/SLOTH1/car-gui
 cd car-gui
+pip install PyQT6
 py main.py
 ```
